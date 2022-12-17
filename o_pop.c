@@ -1,29 +1,29 @@
 #include "monty.h"
-
 /**
- * m_pop - pop top element off of `stack'
- * @stack: double pointer to head of stack
- * @line_number: line number of current operation
- *
- * Return: void
+ * o_pop - deletes a value from the stack (linked list)
+ * @stack: the stack to be deleted
+ * @line_number: the line of the file read
+ * Return: nothing
  */
-void m_pop(stack_t **stack, unsigned int line_number)
+void o_pop(stack_t **stack, unsigned int line_number)
 {
-	stack_t *pop = *stack;
+	stack_t *tmp = *stack;
 
-	if (var.stack_len == 0)
+	if (*stack == NULL || stack == NULL)
 	{
-		dprintf(STDOUT_FILENO,
-			"L%u: can't pop an empty stack\n",
-			line_number);
+		dprintf(STDERR_FILENO, "L%d: can't pop an empty stack\n", line_number);
+		free_dlistint(*stack);
+		fclose(var_global.file);
+		free(var_global.buffer);
 		exit(EXIT_FAILURE);
 	}
-	(*stack)->next->prev = (*stack)->prev;
-	(*stack)->prev->next = (*stack)->next;
-	if (var.stack_len != 1)
-		*stack = (*stack)->next;
+
+	if (tmp->next != NULL) /*the fist one*/
+	{
+		*stack = tmp->next;
+		(*stack)->prev = NULL;
+	}
 	else
 		*stack = NULL;
-	free(pop);
-	var.stack_len--;
+	free(tmp);
 }
