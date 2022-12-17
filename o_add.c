@@ -1,29 +1,24 @@
-/*
- * File: o_add.c
- * Auth: Udogwu Peterside
- */
-
 #include "monty.h"
-/**
- * o_add - adds the top two elements of the stack
- * @stack: the stack to be deleted
- * @line_number: the line of the file read
- * Return: nothing
- */
-void o_add(stack_t **stack, unsigned int line_number)
-{
-	stack_t *tmp = *stack;
 
-	if (stack == NULL || *stack == NULL || (*stack)->next == NULL)
+/**
+ * m_add - add the top two elements of the stack
+ * @stack: double pointer tot he beginning of the stack
+ * @line_number: script line number
+ *
+ * Return: void
+ */
+void m_add(stack_t **stack, unsigned int line_number)
+{
+	int n = 0;
+
+	if (var.stack_len < 2)
 	{
-		fprintf(stderr, "L%d: can't add, stack too short\n", line_number);
-		free_dlistint(*stack);
-		fclose(var_global.file);
-		free(var_global.buffer);
+		dprintf(STDOUT_FILENO,
+			"L%u: can't add, stack too short\n",
+			line_number);
 		exit(EXIT_FAILURE);
 	}
-	tmp->next->n += tmp->n;
-	*stack = tmp->next;
-	(*stack)->prev = NULL;
-	free(tmp);
+	n += (*stack)->n;
+	m_pop(stack, line_number);
+	(*stack)->n += n;
 }
